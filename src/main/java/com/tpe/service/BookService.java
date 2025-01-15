@@ -33,4 +33,12 @@ public class BookService {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException("No book found with the given ID: " + id));
     }
+
+//    TASK 4-b
+    public void deleteBook(Long id) {
+//        findBookById(id);
+//        bookRepository.deleteById(id);
+        Book foundBook = findBookById(id);
+        bookRepository.delete(foundBook);
+    }
 }

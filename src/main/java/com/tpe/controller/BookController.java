@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController // the difference between @Controller, the @RestController has a Response body init
+@RequestMapping("/book")
 public class BookController {
 
     @Autowired
@@ -26,7 +28,7 @@ public class BookController {
         map.put("message", "Book '" + book.getTitle() + "' created successfully.");
 
         return new ResponseEntity<>(map, HttpStatus.CREATED);
-//        return ResponseEntity.created();
+//        return ResponseEntity.created(URI.create("/book/" + book.getId())).body(map); // same
     }
 
 //    TASK 2-a: Get all Books
@@ -43,5 +45,17 @@ public class BookController {
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
         Book foundBook = bookService.findBookById(id);
         return ResponseEntity.ok(foundBook);
+    }
+
+//    TASK 4-a Delete a Book by its ID
+//    http://localhost:8080/book/2 + DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> deleteBookById(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Book ID: " + id + " deleted successfully.");
+
+        return ResponseEntity.ok(map);
+
     }
 }
