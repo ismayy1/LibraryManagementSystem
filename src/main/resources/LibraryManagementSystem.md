@@ -35,7 +35,7 @@
 - **Method**: `GET`
 - **Return: found book**
 - **Endpoint**:  
-  `http://localhost:8080/book?q=id=2`
+  `http://localhost:8080/book/q=id=2`
 
 ### 6. Get a Book by its Title with RequestParam
 
@@ -49,7 +49,7 @@
 - **Method**: `GET`
 - **Return: books with pages**
 - **Endpoint**:  
-  `http://localhost:8080/book?s?page=1&size=2&sort=publicationDate&direction=ASC`
+  `http://localhost:8080/book/s?page=1&size=2&sort=publicationDate&direction=ASC`
 
 ### 8. Update a Book Using DTOs
 

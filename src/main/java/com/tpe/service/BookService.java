@@ -1,6 +1,7 @@
 package com.tpe.service;
 
 import com.tpe.domain.Book;
+import com.tpe.dto.BookDTO;
 import com.tpe.exception.BookNotFoundException;
 import com.tpe.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,38 @@ public class BookService {
 
     public Page<Book> findAllBooksWithPagination(Pageable pageable) {
         return bookRepository.findAll(pageable);
+    }
+
+//    TASK 8-b
+    public Book updateBook(Long id, BookDTO bookDTO) {
+        Book existingBook = findBookById(id);
+
+        existingBook.setTitle(bookDTO.getTitle());
+        existingBook.setAuthor(bookDTO.getAuthor());
+        existingBook.setPublishDate(bookDTO.getPublishDate());
+
+        return bookRepository.save(existingBook);  // works like saveOrUpdate
+    }
+
+//    TASK 9-b
+    public List<Book> findBookByAuthor(String authorName) {
+        List<Book> foundBooks = bookRepository.findByAuthorWithJPQL(authorName);
+
+        if (foundBooks.isEmpty()) {
+            throw new BookNotFoundException("No books found with the given Author Name: " + authorName);
+        }
+        return foundBooks;
+    }
+
+//    HW:
+    public List<Book> findBookByTitleAndAuthor(String title, String author) {
+        List<Book> foundBook = bookRepository.findByAuthorAndTitleJPQL(title, author);
+
+        if (foundBook.isEmpty()) {
+            throw new BookNotFoundException("No books found with the given Author Name: " + author +
+                    ", or Title: " + title);
+        }
+
+        return foundBook;
     }
 }

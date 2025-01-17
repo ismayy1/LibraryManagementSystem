@@ -1,33 +1,25 @@
-package com.tpe.domain;
+package com.tpe.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-@Entity
-@Table(name = "t_book")
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class BookDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
-    private Long id;
-
-    @Column(nullable = false)
     @NotBlank(message = "The book title cannot be Empty.")
     @NotNull(message = "The book title cannot be null. Please provide the name")
     private String title;
 
-    @Column(nullable = false, length = 50)
     @NotBlank(message = "The author name cannot be Empty.")
     @NotNull(message = "The author name cannot be null. Please provide the author")
     @Size(min = 2, max = 50, message = "Author name '${validatedValue}' must be between {min}-{max} characters")
@@ -35,13 +27,7 @@ public class Book {
     // '{}' -> internal var
     private String author;
 
-    @Column(nullable = false)
     @NotBlank(message = "The published date cannot be Empty.")
     @NotNull(message = "The published date cannot be null. Please provide the publication date")
     private String publishDate;
-
-    @ManyToOne
-    @JoinColumn(name = "borrower_id")
-    @JsonIgnore
-    private Borrower borrower;
 }
