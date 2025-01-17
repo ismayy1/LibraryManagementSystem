@@ -3,6 +3,10 @@ package com.tpe.controller;
 import com.tpe.domain.Book;
 import com.tpe.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +60,33 @@ public class BookController {
         map.put("message", "Book ID: " + id + " deleted successfully.");
 
         return ResponseEntity.ok(map);
+    }
 
+//    TASK 5-a: GET a book by its ID, however with query paremeter
+//    http://localhost:8080/book/q?id=2 + GET
+    @GetMapping("/q")
+    public ResponseEntity<Book> getBookByIdWithQueryParam(@RequestParam("id") Long id) {
+        Book foundBook = bookService.findBookById(id);
+        return ResponseEntity.ok(foundBook);
+    }
+
+//    TASK 6-a: GET a book by its title using a request param
+//    http://localhost:8080/book/search?title=Atomic Habits + GET
+    @GetMapping("/search")
+    public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam(value = "title") String bookTitle) {
+        List<Book> matchingBooks = bookService.findBooksByTitle(bookTitle);
+        return ResponseEntity.ok(matchingBooks);
+    }
+
+//    TASK 7-a: GET Books in pages
+//    http://localhost:8080/book?s?page=1&size=2&sort=publishDate&direction=ASC + GET
+    @GetMapping("/s")
+    public ResponseEntity<Page<Book>> getAllBooksWithPagination(@RequestParam("page") int page,
+                                                                @RequestParam("size")int size,
+                                                                @RequestParam("sort") String prop,
+                                                                @RequestParam("direction") Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(page-1, size, Sort.by(direction, prop));
+        Page<Book> bookPage = bookService.findAllBooksWithPagination(pageable);
+        return ResponseEntity.ok(bookPage);
     }
 }

@@ -4,6 +4,8 @@ import com.tpe.domain.Book;
 import com.tpe.exception.BookNotFoundException;
 import com.tpe.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,5 +42,14 @@ public class BookService {
 //        bookRepository.deleteById(id);
         Book foundBook = findBookById(id);
         bookRepository.delete(foundBook);
+    }
+
+//    TASK 6-b
+    public List<Book> findBooksByTitle(String bookTitle) {
+        return bookRepository.findByTitle(bookTitle);
+    }
+
+    public Page<Book> findAllBooksWithPagination(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
 }
