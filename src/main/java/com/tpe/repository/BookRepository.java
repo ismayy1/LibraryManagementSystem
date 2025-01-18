@@ -14,6 +14,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 //    TASK 6-c
     List<Book> findByTitle(String bookTitle);   // Derivation
 
+
+
+
+
+
 //    TASK 9-c
 //    String sqlQ = "SELECT * FROM t_book t WHERE t.author = ?";
     @Query("SELECT b FROM Book b WHERE b.author=:author")   // JPQL query
