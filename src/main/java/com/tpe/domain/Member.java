@@ -1,5 +1,6 @@
 package com.tpe.domain;
 
+import com.tpe.dto.MemberDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "t_borrower")
+@Table(name = "t_member")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Borrower {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +38,7 @@ public class Borrower {
     private String email;
 
 //    We are on the ONE side
-    @OneToMany(mappedBy = "borrower")
+    @OneToMany(mappedBy = "member")
     private List<Book> bookList = new ArrayList<>();
 
     private LocalDateTime registrationDate;
@@ -45,5 +46,12 @@ public class Borrower {
     @PrePersist
     public void prePersist() {
         this.registrationDate = LocalDateTime.now();
+    }
+
+    public Member(MemberDTO memberDTO) {
+        this.firstName = memberDTO.getFirstName();
+        this.lastName = memberDTO.getLastName();
+        this.phoneNumber = memberDTO.getPhoneNumber();
+        this.email = memberDTO.getEmail();
     }
 }

@@ -41,7 +41,7 @@ public class Book {
     private String publishDate;
 
     @ManyToOne
-    @JoinColumn(name = "borrower_id")
+    @JoinColumn(name = "member_id")
     @JsonIgnore
-    private Borrower borrower;
+    private Member member;
 }
