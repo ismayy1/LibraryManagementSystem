@@ -1,10 +1,11 @@
 package com.tpe.service;
 
 import com.tpe.domain.Book;
+import com.tpe.domain.Member;
 import com.tpe.dto.BookDTO;
 import com.tpe.exception.BookNotFoundException;
+import com.tpe.exception.ConflictException;
 import com.tpe.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,15 @@ import java.util.List;
 public class BookService {
 
     private BookRepository bookRepository;
+    private MemberService memberService;
 
-    @Autowired  // optional
-    public BookService(BookRepository bookRepository) {
+//    Autowired not needed after Spring Framework 4, and SpringBoot 2.7.14 uses Spring Framework 5
+    public BookService(BookRepository bookRepository, MemberService memberService) {
         this.bookRepository = bookRepository;
+        this.memberService = memberService;
     }
 
-//    TASK 1-b
+    //    TASK 1-b
     public void saveBook(Book book) {
         bookRepository.save(book);
     }
@@ -66,7 +69,7 @@ public class BookService {
     }
 
 //    TASK 9-b
-    public List<Book> findBookByAuthor(String authorName) {
+    public List<Book> findBooksByAuthor(String authorName) {
         List<Book> foundBooks = bookRepository.findByAuthorWithJPQL(authorName);
 
         if (foundBooks.isEmpty()) {
@@ -77,7 +80,7 @@ public class BookService {
 
 //    HW:
     public List<Book> findBookByTitleAndAuthor(String title, String author) {
-        List<Book> foundBook = bookRepository.findByAuthorAndTitleJPQL(title, author);
+        List<Book> foundBook = bookRepository.findByTitleContainsAndAuthorContainsAllIgnoreCase(title, author);
 
         if (foundBook.isEmpty()) {
             throw new BookNotFoundException("No books found with the given Author Name: " + author +
@@ -85,5 +88,29 @@ public class BookService {
         }
 
         return foundBook;
+    }
+
+    public List<Book> findBookByTitle(String title) {
+        return bookRepository.findByTitleContainsIgnoreCase(title);
+    }
+
+    public List<Book> findBookByAuthor(String author) {
+        return bookRepository.findByAuthorContainsIgnoreCase(author);
+    }
+
+    public void assignBookToMember(Long bookId, Long memberId) {
+        Book existingBook = findBookById(bookId);
+        Member existingMember = memberService.findMemberById(memberId);
+
+//        Check if the book belongs to someone else
+        if (existingBook.getMember() != null && existingBook.getMember() != existingMember) {
+            throw new ConflictException("The given book already belongs to someone else. Member ID: " + existingBook.getMember().getId());
+//            Check if book already belongs to the existingMember
+        } else if (existingBook.getMember() == existingMember) {
+            throw new ConflictException("The given book already belongs to the given member.");
+        } else {
+            existingBook.setMember(existingMember);
+            bookRepository.save(existingBook);
+        }
     }
 }

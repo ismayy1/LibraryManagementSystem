@@ -2,6 +2,7 @@ package com.tpe.controller;
 
 import com.tpe.domain.Book;
 import com.tpe.dto.BookDTO;
+import com.tpe.exception.ArgumentExpectedException;
 import com.tpe.exception.BookNotFoundException;
 import com.tpe.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-//    TASK 1-a: Save a Book
+    //    TASK 1-a: Save a Book
 //    http://localhost:8080/book + POST + JSON body
     @PostMapping
     public ResponseEntity<Map<String, String>> createBook(@RequestBody Book book) {
@@ -37,7 +38,7 @@ public class BookController {
 //        return ResponseEntity.created(URI.create("/book/" + book.getId())).body(map); // same
     }
 
-//    TASK 2-a: Get all Books
+    //    TASK 2-a: Get all Books
 //    http://localhost:8080/book + GET + JSON body
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
@@ -45,7 +46,7 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-//    TASK 3-a: Get a Book by its ID
+    //    TASK 3-a: Get a Book by its ID
 //    http://localhost:8080/book/2 + GET + JSON body
     @GetMapping("/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable Long id) {
@@ -53,7 +54,7 @@ public class BookController {
         return ResponseEntity.ok(foundBook);
     }
 
-//    TASK 4-a Delete a Book by its ID
+    //    TASK 4-a Delete a Book by its ID
 //    http://localhost:8080/book/2 + DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteBookById(@PathVariable Long id) {
@@ -64,7 +65,7 @@ public class BookController {
         return ResponseEntity.ok(map);
     }
 
-//    TASK 5-a: GET a book by its ID, however with query paremeter
+    //    TASK 5-a: GET a book by its ID, however with query paremeter
 //    http://localhost:8080/book/q?id=2 + GET
     @GetMapping("/q")
     public ResponseEntity<Book> getBookByIdWithQueryParam(@RequestParam("id") Long id) {
@@ -72,7 +73,7 @@ public class BookController {
         return ResponseEntity.ok(foundBook);
     }
 
-//    TASK 6-a: GET a book by its title using a request param
+    //    TASK 6-a: GET a book by its title using a request param
 //    http://localhost:8080/book/search?title=Atomic Habits + GET
     @GetMapping("/search")
     public ResponseEntity<List<Book>> getBooksByTitle(@RequestParam(value = "title") String bookTitle) {
@@ -80,19 +81,19 @@ public class BookController {
         return ResponseEntity.ok(matchingBooks);
     }
 
-//    TASK 7-a: GET Books in pages
+    //    TASK 7-a: GET Books in pages
 //    http://localhost:8080/book/s?page=1&size=2&sort=publishDate&direction=ASC + GET
     @GetMapping("/s")
     public ResponseEntity<Page<Book>> getAllBooksWithPagination(@RequestParam("page") int page,
                                                                 @RequestParam("size") int size,
                                                                 @RequestParam("sort") String prop,
                                                                 @RequestParam("direction") Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(page-1, size, Sort.by(direction, prop));
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(direction, prop));
         Page<Book> bookPage = bookService.findAllBooksWithPagination(pageable);
         return ResponseEntity.ok(bookPage);
     }
 
-//    TASK 8-a: Update a Book Using DTOs, PUT
+    //    TASK 8-a: Update a Book Using DTOs, PUT
 //    http://localhost:8080/book/update/2 + PUT
     @PutMapping("/update/{id}")
     public ResponseEntity<Map<String, Object>> updateBookById(@PathVariable("id") Long id,
@@ -105,16 +106,16 @@ public class BookController {
         return ResponseEntity.ok(map);
     }
 
-//    TASK 9-a: Get a Book By Its Author Using JPQL
+    //    TASK 9-a: Get a Book By Its Author Using JPQL
 //    http://localhost:8080/book/a?author=AB + GET
     @GetMapping("/a")
     public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam("author") String authorName) {
-        List<Book> foundBooks = bookService.findBookByAuthor(authorName);
+        List<Book> foundBooks = bookService.findBooksByAuthor(authorName);
         return ResponseEntity.ok(foundBooks);
     }
 
-//    HW 1: Create a final endpoint that can do 2 things: Filtering by author and publishDate
-//    HW 2: Add "contains" ability to this mnethod, if the book is War and Crime for instanse, and if the client
+    //    HW 1: Create a final endpoint that can do 2 things: Filtering by author and publishDate
+//    HW 2: Add "contains" ability to this method, if the book is War and Crime for instance, and if the client
 //    asks for "War" or "war" they should be able to see "War and Crime", and also all the other books that
 //    have "War" in the name as a result.
 //    TASK HW-1
@@ -130,13 +131,25 @@ public class BookController {
             foundBook = bookService.findBookByTitleAndAuthor(title, author);
             return ResponseEntity.ok(foundBook);
         } else if (title != null) {
-            foundBook = bookService.findBooksByTitle(title);
+            foundBook = bookService.findBookByTitle(title);
             return ResponseEntity.ok(foundBook);
         } else if (author != null) {
             foundBook = bookService.findBookByAuthor(author);
             return ResponseEntity.ok(foundBook);
         } else {
-            throw new BookNotFoundException("Book with the given data doesn't exist.");
+            throw new ArgumentExpectedException("Book with the given data doesn't exist.");
         }
+    }
+
+//    TASK 10-a: Assign a member to a book
+//    http://localhost:8080/book/assign?book=2&member=1 + PATCH
+    @PatchMapping("/assign")
+    public ResponseEntity<Map<String, String>> assignBookToMember(@RequestParam("book") Long bookId,
+                                                                  @RequestParam("member") Long memberId) {
+        bookService.assignBookToMember(bookId, memberId);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Book #" + bookId + " successfully assigned to member #" + memberId);
+        return ResponseEntity.ok(map);
     }
 }
