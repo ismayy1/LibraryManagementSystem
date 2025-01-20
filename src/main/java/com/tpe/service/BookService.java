@@ -66,7 +66,7 @@ public class BookService {
     }
 
 //    TASK 9-b
-    public List<Book> findBookByAuthor(String authorName) {
+    public List<Book> findBooksByAuthor(String authorName) {
         List<Book> foundBooks = bookRepository.findByAuthorWithJPQL(authorName);
 
         if (foundBooks.isEmpty()) {
@@ -77,7 +77,7 @@ public class BookService {
 
 //    HW:
     public List<Book> findBookByTitleAndAuthor(String title, String author) {
-        List<Book> foundBook = bookRepository.findByAuthorAndTitleJPQL(title, author);
+        List<Book> foundBook = bookRepository.findByTitleContainsAndAuthorContainsAllIgnoreCase(title, author);
 
         if (foundBook.isEmpty()) {
             throw new BookNotFoundException("No books found with the given Author Name: " + author +
@@ -85,5 +85,13 @@ public class BookService {
         }
 
         return foundBook;
+    }
+
+    public List<Book> findBookByTitle(String title) {
+        return bookRepository.findByTitleContainsIgnoreCase(title);
+    }
+
+    public List<Book> findBookByAuthor(String author) {
+        return bookRepository.findByAuthorContainsIgnoreCase(author);
     }
 }

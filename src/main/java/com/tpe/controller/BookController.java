@@ -2,6 +2,7 @@ package com.tpe.controller;
 
 import com.tpe.domain.Book;
 import com.tpe.dto.BookDTO;
+import com.tpe.exception.ArgumentExpectedException;
 import com.tpe.exception.BookNotFoundException;
 import com.tpe.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,12 +110,12 @@ public class BookController {
 //    http://localhost:8080/book/a?author=AB + GET
     @GetMapping("/a")
     public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam("author") String authorName) {
-        List<Book> foundBooks = bookService.findBookByAuthor(authorName);
+        List<Book> foundBooks = bookService.findBooksByAuthor(authorName);
         return ResponseEntity.ok(foundBooks);
     }
 
 //    HW 1: Create a final endpoint that can do 2 things: Filtering by author and publishDate
-//    HW 2: Add "contains" ability to this mnethod, if the book is War and Crime for instanse, and if the client
+//    HW 2: Add "contains" ability to this method, if the book is War and Crime for instance, and if the client
 //    asks for "War" or "war" they should be able to see "War and Crime", and also all the other books that
 //    have "War" in the name as a result.
 //    TASK HW-1
@@ -130,13 +131,13 @@ public class BookController {
             foundBook = bookService.findBookByTitleAndAuthor(title, author);
             return ResponseEntity.ok(foundBook);
         } else if (title != null) {
-            foundBook = bookService.findBooksByTitle(title);
+            foundBook = bookService.findBookByTitle(title);
             return ResponseEntity.ok(foundBook);
         } else if (author != null) {
             foundBook = bookService.findBookByAuthor(author);
             return ResponseEntity.ok(foundBook);
         } else {
-            throw new BookNotFoundException("Book with the given data doesn't exist.");
+            throw new ArgumentExpectedException("Book with the given data doesn't exist.");
         }
     }
 }
