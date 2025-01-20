@@ -22,4 +22,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 //    HW:
     @Query("SELECT b FROM Book b WHERE b.title=:title AND b.author=:author")
     List<Book> findByAuthorAndTitleJPQL(@Param("title") String title, @Param("author") String author);
+
+//    HW:
+//    The name of the method is a keyword from SpringDataJPA
+    List<Book> findByTitleContainsAndAuthorContainsAllIgnoreCase(String title, String authorName);
+
+    List<Book> findByTitleContainsIgnoreCase(String title);
+
+    List<Book> findByAuthorContainsIgnoreCase(String author);
 }
