@@ -48,6 +48,10 @@ public class Member {
         this.registrationDate = LocalDateTime.now();
     }
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Member(MemberDTO memberDTO) {
         this.firstName = memberDTO.getFirstName();
         this.lastName = memberDTO.getLastName();
