@@ -5,22 +5,27 @@ import com.tpe.dto.MemberDTO;
 import com.tpe.exception.ConflictException;
 import com.tpe.exception.MemberNotFoundException;
 import com.tpe.repository.MemberRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Service
+@AllArgsConstructor // it can be created instead of constructor injection
 public class MemberService {
 
+//    Constructor injection
     private MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+//    public MemberService(MemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
+//    Constructor injection
 
 //    TASK 1-b:
     public void saveMember(MemberDTO memberDTO) {
+
 
         if (memberRepository.existsByEmail(memberDTO.getEmail())) {
             throw new ConflictException("The provided Email address is already in use.");
