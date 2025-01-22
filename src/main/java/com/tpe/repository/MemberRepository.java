@@ -13,9 +13,4 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Boolean existsByEmail(String email);
 
-//    Spring security methods
-    Optional<User> findByUserName(String username) throws ResourceNotFoundException;
-//     findByUserName -> userName should be same as the field in user class
-
-
 }

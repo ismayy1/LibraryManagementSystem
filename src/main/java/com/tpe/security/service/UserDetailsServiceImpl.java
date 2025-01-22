@@ -4,6 +4,7 @@ import com.tpe.domain.Role;
 import com.tpe.domain.User;
 import com.tpe.exception.ResourceNotFoundException;
 import com.tpe.repository.MemberRepository;
+import com.tpe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final MemberRepository userRepository;
+//    private final MemberRepository userRepository;
+
+    private final UserRepository userRepository;
 
     //Another random field that is not final
 
