@@ -3,6 +3,7 @@ package com.tpe.controller;
 import com.tpe.domain.Member;
 import com.tpe.dto.MemberDTO;
 import com.tpe.service.MemberService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
+@AllArgsConstructor
 public class MemberController {
 
     private MemberService memberService;
 
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
+//    public MemberController(MemberService memberService) {
+//        this.memberService = memberService;
+//    }
 
     //    TASK 1-a: Save a Member
 //    http://localhost:8080/member + POST + JSON Body
@@ -50,4 +52,13 @@ public class MemberController {
     }
 
 //    HW: Delete and update members.
+
+//    HW: Delete and update members.
+
+
+//    ================ Spring Security ===============
+
+//    All RequestMapping starts with ("/register")
+//    http://localhost:8080/register + POST
+    @PostMapping("/register")
 }
