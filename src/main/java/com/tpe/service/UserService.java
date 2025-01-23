@@ -6,6 +6,7 @@ import com.tpe.domain.enums.UserRole;
 import com.tpe.dto.UserDTO;
 import com.tpe.repository.MemberRepository;
 import com.tpe.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class UserService {
 
 //    private MemberRepository memberRepository;
     private UserRepository userRepository;
-
     private PasswordEncoder passwordEncoder;
     private RoleService roleService;
 

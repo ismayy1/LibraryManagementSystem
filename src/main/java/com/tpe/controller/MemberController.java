@@ -58,22 +58,4 @@ public class MemberController {
 //    HW: Delete and update members.
 
 //    HW: Delete and update members.
-
-
-//    ================ Spring Security ===============
-
-//    All RequestMapping starts with ("/register")
-//    http://localhost:8080/member/register + POST + JSON Body
-
-    private UserService userService;
-
-    @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody UserDTO userDTO) {
-        userService.saveUser(userDTO);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", "Register successfully.");
-
-        return new ResponseEntity<>(map, HttpStatus.CREATED);
-    }
 }

@@ -1,0 +1,25 @@
+#spring.application.name=LibraryManagementSystem
+
+server:
+  error:
+    include-binding-errors: always
+    include-message: always
+    include-stacktrace: never
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sbootpractice
+    username: dev_user
+    password: dev_user
+  security:
+    user:
+      name: name
+      password: password
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        diealect: org.hibernate.dialect.PostgreSQL9Dialect
+        format_sql: true
