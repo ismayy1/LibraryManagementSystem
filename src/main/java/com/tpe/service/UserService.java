@@ -4,7 +4,6 @@ import com.tpe.domain.Role;
 import com.tpe.domain.User;
 import com.tpe.domain.enums.UserRole;
 import com.tpe.dto.UserDTO;
-import com.tpe.repository.MemberRepository;
 import com.tpe.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +16,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserService {
 
-//    private MemberRepository memberRepository;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private RoleService roleService;
@@ -27,7 +25,7 @@ public class UserService {
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setUserName(userDTO.getUserName());
-//        newUser.setPassword(userDTO.getPassword());
+//        newUser.setPassword(userDTO.getPassword());   //this is not valid, user password should be done via passwordEncoder
         newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         Role role = roleService.findRoleByType(UserRole.ROLE_ADMIN);

@@ -21,7 +21,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
 
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf()
